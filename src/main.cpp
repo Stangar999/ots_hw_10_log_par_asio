@@ -29,7 +29,7 @@ int main(int argc, const char *argv[]) {
 
     io_context.run();
   } catch (const std::exception &ex) {
-    std::cerr << "Exception: " << ex.what() << "\n";
+    std::cerr << "Exception: " << /*ex.what() <<*/ "\n";
   }
   return 0;
 }
