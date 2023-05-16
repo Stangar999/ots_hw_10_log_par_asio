@@ -1,4 +1,4 @@
-#include <boost/asio.hpp>
+﻿#include <boost/asio.hpp>
 #include <cstdlib>
 #include <iostream>
 #include <memory>
@@ -9,21 +9,23 @@
 using boost::asio::ip::tcp;
 
 class session : public std::enable_shared_from_this<session> {
-public:
+ public:
   session(tcp::socket socket, async::handle_t handle)
-      : _socket(std::move(socket)), _handle(handle),
+      : _socket(std::move(socket)),
+        _handle(handle),
         _data(128,
-              ' ') // TODO задаю 128Б, но если входящая команда будет длинее то
-                   // она разобьется на несколько команд, что не ожидаемо
+              ' ')  // TODO задаю 128Б, но если входящая команда будет длинее то
+                    // она разобьется на несколько команд, что не ожидаемо
   // как получать команды размер которых заранее неизвестен?
-  {}
+  {
+  }
 
   void start() {
     //
     do_read();
   }
 
-private:
+ private:
   void do_read() {
     auto self(shared_from_this());
     _socket.async_read_some(
@@ -37,7 +39,7 @@ private:
             std::cout << "socket close " << std::endl;
           } else {
             async::disconnect(_handle);
-            std::cout << ec.what();
+            // std::cout << ec.what();
           }
         });
   }
@@ -48,14 +50,15 @@ private:
 };
 
 class Server {
-public:
+ public:
   Server(boost::asio::io_context &io_context, std::size_t port,
          std::size_t bulk)
-      : _acceptor(io_context, tcp::endpoint(tcp::v4(), port)), _bulk(bulk) {
+      : _acceptor(io_context, tcp::endpoint(tcp::v4(), port)),
+        _bulk(bulk) {
     do_accept();
   }
 
-private:
+ private:
   void do_accept() {
     _acceptor.async_accept(
         [this](boost::system::error_code ec, tcp::socket socket) {

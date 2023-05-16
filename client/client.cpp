@@ -27,7 +27,7 @@ int main(int argc, char *argv[]) {
 
     for (int i = first_cmd; i < last_cmd; ++i) {
       std::string data_ = std::to_string(i) + '\n';
-      ba::write(clock, ba::buffer(data_));
+      ba::write(sock, ba::buffer(data_));
     }
 
   } catch (const boost::system::system_error &ex) {
