@@ -52,7 +52,6 @@ class session : public std::enable_shared_from_this<session> {
             boost::asio::streambuf qw(bufs);
 
             // и так не работает
-            static_cast<const char *>(qwery.data().data());
             std::string str(bufs.begin(), bufs.end());
 
             // тоже не работатет
