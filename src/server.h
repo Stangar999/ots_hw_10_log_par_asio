@@ -73,7 +73,7 @@ class session : public std::enable_shared_from_this<session> {
             std::cout << "socket close " << std::endl;
           } else {
             async::disconnect(_handle);
-            std::cout << ec.what();
+            std::cout << ec.message();
           }
         });
   }
