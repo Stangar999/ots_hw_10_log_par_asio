@@ -16,6 +16,8 @@ void print_time() {
 }
 
 int main(int argc, const char *argv[]) {
+  // std::locale::global(std::locale("Rus"));
+  setlocale(LC_ALL, "rus");
   try {
     if (argc != 3) {
       std::cerr << "Usage: async_tcp_server <port> <bulk_size>\n";

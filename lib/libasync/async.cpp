@@ -39,6 +39,12 @@ void receive(handle_t handle, const char *data, std::size_t size) {
   }
 }
 
-void disconnect(handle_t handle) { _command_handler.erase(handle); }
+void disconnect(handle_t handle) {
+  _command_handler.erase(handle);
+  if (_command_handler.empty()) {
+    FileLogger::Deinit();
+    OstreamLogger::Deinit();
+  }
+}
 
-} // namespace async
+}  // namespace async

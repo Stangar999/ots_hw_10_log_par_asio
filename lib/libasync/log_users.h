@@ -14,20 +14,24 @@
 
 // Singleton
 class FileLogger : public IObserver {
-public:
+ public:
   static std::shared_ptr<FileLogger> GetFileLogger();
+  static void Deinit();
 
   ~FileLogger();
 
   void UpdateEnd(const CommandHolder &comand_holder) override;
 
-private:
+ private:
   FileLogger() {
     _pool_threads.emplace_back(&FileLogger::WriteAndWaite, this);
     _pool_threads.emplace_back(&FileLogger::WriteAndWaite, this);
   }
 
   void WriteAndWaite();
+
+  static std::shared_ptr<FileLogger> _file_logger;
+  static std::mutex _mx;
 
   std::queue<CommandHolder> _comand_queue;
   std::vector<std::thread> _pool_threads;
@@ -40,29 +44,23 @@ private:
 
 // Singleton
 class OstreamLogger : public IObserver {
-public:
+ public:
   static std::shared_ptr<OstreamLogger> GetOstreamLogger();
+  static void Deinit();
+
   void UpdateEnd(const CommandHolder &comand_holder) override;
   ~OstreamLogger();
 
-private:
+ private:
   OstreamLogger();
   void WriteConsole();
+
+  inline static std::shared_ptr<OstreamLogger> _ostream_logger = nullptr;
+  inline static std::mutex _mx;
+
   std::queue<CommandHolder> _comand_queue;
   std::condition_variable_any _cv;
   std::mutex _m;
   std::thread _worker;
   std::atomic_bool _is_end = false;
 };
-
-// class OstreamLogger : public IObserver {
-// public:
-//  void UpdateEnd(const CommandHolder &comand_holder) override;
-
-// private:
-//  static void WriteConsole(std::stop_token stoken);
-//  static std::queue<CommandHolder> _comand_queue;
-//  static std::condition_variable_any cv;
-//  static std::mutex m;
-//  static std::jthread th_log_cons;
-//};
