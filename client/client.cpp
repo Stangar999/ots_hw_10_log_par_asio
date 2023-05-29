@@ -18,13 +18,13 @@ int main(int argc, char *argv[]) {
 
   while (true) {
     std::string data_;
-    std::cin >> data_;
+    std::getline(std::cin, data_);
     if (data_ == "0") {
       sock.close();
       break;
     }
 
-    ba::write(sock, ba::buffer(data_));
+    ba::write(sock, ba::buffer(data_ + '\n'));
   }
 
   return 0;
